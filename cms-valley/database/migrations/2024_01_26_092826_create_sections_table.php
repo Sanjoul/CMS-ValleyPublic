@@ -13,12 +13,11 @@ return new class extends Migration
     {
         Schema::create('sections', function (Blueprint $table) {
             $table->id('section_id');
+            $table->unsignedBigInteger('page_id');
             $table->string('name');
-            $table->string('status')->nullable();
-            $table->unsignedBigInteger('content_id')->nullable();
+            $table->string('status');
             $table->timestamps();
-
-            $table->foreign('content_id')->references('content_id')->on('contents')->restrictOnDelete()->cascadeOnUpdate();
+            $table->foreign('page_id')->references('page_id')->on('pages')->restrictOnDelete()->cascadeOnUpdate();
         });
     }
 

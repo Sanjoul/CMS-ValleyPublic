@@ -13,9 +13,11 @@ return new class extends Migration
     {
         Schema::create('contents', function (Blueprint $table) {
             $table->id('content_id');
+            $table->unsignedBigInteger('section_id');
             $table->string('name');
             $table->string('type');
             $table->timestamps();
+            $table->foreign('section_id')->references('section_id')->on('sections')->cascadeOnDelete()->cascadeOnUpdate();
         });
     }
 

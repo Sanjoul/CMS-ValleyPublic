@@ -16,7 +16,13 @@ class DatabaseSeeder extends Seeder
 
 
         $this->call([
-            PageTableSeeder::class
+            PageTableSeeder::class,
+            SectionTableSeeder::class,
+            ContentTableSeeder::class,
+            MediaTableSeeder::class,
+            ContentMediaTableSeeder::class
+
+
         ]);
     }
 }

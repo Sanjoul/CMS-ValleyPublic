@@ -12,6 +12,12 @@ class Page extends Model
     protected $table = 'pages';
     protected $fillable = [
         'pagenames',
-        'title'
+        'title',
+        'section_id'
     ];
+
+    public function sections()
+    {
+        return $this->hasMany(Section::class, 'page_id');
+    }
 }
