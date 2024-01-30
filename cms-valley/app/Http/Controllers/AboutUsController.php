@@ -13,6 +13,7 @@ class AboutUsController extends Controller
 {
     public function index(): JsonResponse
     {
+        DB::beginTransaction();
         try {
             $pageName = "About Us";
             $aboutUsSections = Section::whereHas('page', function ($query) use ($pageName) {
@@ -38,9 +39,10 @@ class AboutUsController extends Controller
                     'contents' => $contentsData
                 ];
             });
-
+            DB::commit();
             return response()->json([$data]);
         } catch (\Exception $e) {
+            DB::rollBack();
             Log::error($e->getMessage());
             return response()->json(['error' => $e->getMessage()], 500);
         }
@@ -49,6 +51,13 @@ class AboutUsController extends Controller
 
     public function edit($id)
     {
+        try {
+            $section = Section::with(['page', 'contents.medias'])->find($id);
+            return response()->json($section);
+        } catch (\Exception $e) {
+            Log::error($e->getMessage());
+            return response()->json(['error' => $e->getMessage()], 500);
+        }
     }
 
     public function update(Request $request, $id)
