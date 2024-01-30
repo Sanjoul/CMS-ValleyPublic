@@ -9,7 +9,7 @@ class Section extends Model
 {
     use HasFactory;
 
-
+    protected $primaryKey = 'id';
     protected $table = 'sections';
     protected $fillable = [
         'name',
@@ -24,6 +24,6 @@ class Section extends Model
 
     public function contents()
     {
-        return $this->hasMany(Content::class, 'section_id', 'section_id');
+        return $this->hasMany(Content::class, 'section_id');
     }
 }

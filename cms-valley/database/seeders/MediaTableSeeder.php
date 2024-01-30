@@ -2,7 +2,9 @@
 
 namespace Database\Seeders;
 
+// use Faker\Core\File;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Support\Facades\File;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
@@ -13,14 +15,16 @@ class MediaTableSeeder extends Seeder
      */
     public function run(): void
     {
-        $mediaItems = [
-            ['name' => 'Media 1', 'path' => '/path/to/media1.jpg', 'type' => 'image'],
-            ['name' => 'Media 2', 'path' => '/path/to/media2.mp4', 'type' => 'video'],
-            ['name' => 'Media 3', 'path' => '/path/to/media3.png', 'type' => 'image'],
-        ];
+        $images = File::allFiles(storage_path('app/public/images'));
 
-        foreach ($mediaItems as $media) {
-            DB::table('medias')->insert($media);
+        foreach ($images as $image) {
+            DB::table('medias')->insert([
+                'name' => $image->getFilename(),
+                'path' => 'storage/images/' . $image->getFilename(),
+                'type' => $image->getExtension(),
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
         }
     }
 }

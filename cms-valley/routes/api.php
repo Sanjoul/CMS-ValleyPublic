@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AboutUsController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -17,3 +18,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::get('about-us', [AboutUsController::class, 'index']);
+Route::get('/about-us/edit/{id}', [AboutUsController::class, 'edit']);
+// Route::put('about-us', [AboutUsController::class, 'update']);

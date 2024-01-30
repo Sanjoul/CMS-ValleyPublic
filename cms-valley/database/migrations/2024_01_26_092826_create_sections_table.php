@@ -12,12 +12,12 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('sections', function (Blueprint $table) {
-            $table->id('section_id');
+            $table->id();
             $table->unsignedBigInteger('page_id');
             $table->string('name');
             $table->string('status');
             $table->timestamps();
-            $table->foreign('page_id')->references('page_id')->on('pages')->restrictOnDelete()->cascadeOnUpdate();
+            $table->foreign('page_id')->references('id')->on('pages')->restrictOnDelete()->cascadeOnUpdate();
         });
     }
 

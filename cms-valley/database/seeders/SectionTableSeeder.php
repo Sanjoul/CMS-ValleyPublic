@@ -16,12 +16,11 @@ class SectionTableSeeder extends Seeder
     public function run(): void
     {
 
-        $pageIds = Page::pluck('page_id')->toArray();
-
         $sections = [
-            ['name' => 'Section 1', 'status' => 'active',  'page_id' => $pageIds[array_rand($pageIds)]],
-            ['name' => 'Section 2', 'status' => 'inactive', 'page_id' => $pageIds[array_rand($pageIds)]],
-            ['name' => 'Section 3', 'status' => 'active', 'page_id' => $pageIds[array_rand($pageIds)]],
+            ['name' => 'Introduction', 'status' => 'active',  'page_id' => 1],
+            ['name' => "Founder's Message", 'status' => 'inactive', 'page_id' => 1],
+            ['name' => "Chairman's Message", 'status' => 'active', 'page_id' => 1],
+            ['name' => "Mission", 'status' => 'active', 'page_id' => 1],
         ];
 
         foreach ($sections as $sections) {

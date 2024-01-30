@@ -22,7 +22,6 @@ class DatabaseSeeder extends Seeder
             MediaTableSeeder::class,
             ContentMediaTableSeeder::class
 
-
         ]);
     }
 }

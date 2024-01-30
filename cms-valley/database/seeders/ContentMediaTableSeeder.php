@@ -16,25 +16,18 @@ class ContentMediaTableSeeder extends Seeder
      */
     public function run(): void
     {
-        $contentIds = Content::pluck('content_id')->toArray();
-        $mediaIds = Media::pluck('media_id')->toArray();
+        // Select specific Content and Media records you want to link
+        $selectedContentIds = [3]; // Replace with the actual Content IDs you want to link
+        $selectedMediaIds = [4];    // Replace with the actual Media IDs you want to link
 
-        $contentIds = Content::pluck('content_id')->toArray();
-        $mediaIds = Media::pluck('media_id')->toArray();
-
-        // Ensure there are contents and medias to link
-        if (!empty($contentIds) && !empty($mediaIds)) {
-            // Let's create 10 random links for example
-            foreach ($contentIds as $contentId) {
-                foreach ($mediaIds as $mediaId) {
-                    // Insert the relation into content_media table
-                    DB::table('content_media')->insert([
-                        'content_id' => $contentId,
-                        'media_id' => $mediaId,
-                        'created_at' => now(),
-                        'updated_at' => now()
-                    ]);
-                }
+        foreach ($selectedContentIds as $contentId) {
+            foreach ($selectedMediaIds as $mediaId) {
+                DB::table('content_media')->insert([
+                    'content_id' => $contentId,
+                    'media_id' => $mediaId,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
             }
         }
     }

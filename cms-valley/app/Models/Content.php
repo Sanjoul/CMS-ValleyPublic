@@ -9,6 +9,7 @@ class Content extends Model
 {
     use HasFactory;
     protected $table = 'contents';
+    protected $primaryKey = 'id';
 
     protected $fillable = [
         'name ',
@@ -18,16 +19,16 @@ class Content extends Model
 
     public function section()
     {
-        return $this->belongsTo(Section::class, 'section_id', 'section_id');
+        return $this->belongsTo(Section::class, 'section_id');
     }
 
     public function medias()
     {
         return $this->belongsToMany(
-            Media::class,    // Related model
-            'content_media', // Pivot table
-            'content_id',    // Foreign key on the pivot table for the current model
-            'media_id'       // Foreign key on the pivot table for the related model
+            Media::class,
+            'content_media',
+            'content_id',
+            'media_id'
         );
     }
 }

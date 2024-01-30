@@ -16,8 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('content_id');
             $table->unsignedBigInteger('media_id');
             $table->timestamps();
-            $table->foreign('content_id')->references('content_id')->on('contents')->restrictOnDelete()->cascadeOnUpdate();
-            $table->foreign('media_id')->references('media_id')->on('medias')->restrictOnDelete()->cascadeOnUpdate();
+            $table->foreign('content_id')->references('id')->on('contents')->restrictOnDelete()->cascadeOnUpdate();
+            $table->foreign('media_id')->references('id')->on('medias')->restrictOnDelete()->cascadeOnUpdate();
         });
     }
 
