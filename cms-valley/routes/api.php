@@ -21,3 +21,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 
 Route::get('admin/about-us', [AboutUsController::class, 'index']);
 Route::get('admin/about-us/edit/{id}', [AboutUsController::class, 'edit']);
+Route::put('admin/about-us/update/{id}', [AboutUsController::class, 'update']);

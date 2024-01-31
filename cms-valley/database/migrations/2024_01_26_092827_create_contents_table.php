@@ -16,7 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('section_id');
             $table->string('name');
             $table->string('content_type');
-            $table->string('content_value')->nullable();
+            $table->longText('content_value')->nullable();
             $table->timestamps();
             $table->foreign('section_id')->references('id')->on('sections')->cascadeOnDelete()->cascadeOnUpdate();
         });

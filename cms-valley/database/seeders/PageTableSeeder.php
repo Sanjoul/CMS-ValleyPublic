@@ -19,7 +19,9 @@ class PageTableSeeder extends Seeder
         $pages = [
             ['pagenames' => 'Homepage', 'title' => 'This is Home Page', 'id' => 2],
             ['pagenames' => 'About Us', 'title' => 'This is About Page', 'id' => 1],
-            ['pagenames' => 'Contact Us', 'title' => 'This is Contact Page', 'id' => 3],
+            ['pagenames' => 'Academics', 'title' => 'This is Academics Page', 'id' => 3],
+            ['pagenames' => 'Contact Us', 'title' => 'This is Contact Page', 'id' => 4],
+
         ];
 
         foreach ($pages as $page) {
