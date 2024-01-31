@@ -22,27 +22,41 @@ class AboutUsController extends Controller
             $aboutUsSections = Section::whereHas('page', function ($query) use ($pageName) {
                 $query->where('pagenames', $pageName);
             })->with(['page', 'contents.medias'])->get();
+
             $data = $aboutUsSections->map(function ($section) {
                 $contentsData = $section->contents->map(function ($content) {
-                    $mediaNames = $content->medias->map(function ($media) {
-                        return $media->name;
-                    })->all();
-
-                    return [
-                        'content_name' => $content->name,
+                    $contentData = [
+                        'id' => $content->id,
+                        'name' => $content->name,
+                        'content_type' => $content->content_type,
                         'content_value' => $content->content_value,
-                        'media_names' => $mediaNames,
                     ];
+
+                    // Include media details if the content type is not 'text'
+                    if ($content->content_type !== 'text') {
+                        $contentData['medias'] = $content->medias->map(function ($media) {
+                            return [
+                                'id' => $media->id,
+                                'media_name' => $media->name,
+                                'path' => $media->path,
+                                'type' => $media->type,
+                            ];
+                        })->all();
+                    }
+
+                    return $contentData;
                 });
+
                 return [
+                    'pagename' => $section->page->pagenames,
                     'section_id' => $section->id,
                     'section_name' => $section->name,
-                    'pagename' => $section->page->pagenames,
                     'contents' => $contentsData
                 ];
             });
+
             DB::commit();
-            return response()->json([$data]);
+            return response()->json($data);
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error($e->getMessage());
@@ -138,37 +152,6 @@ class AboutUsController extends Controller
             DB::rollBack();
             Log::error('Update failed', ['id' => $id, 'error' => $e->getMessage()]);
             return response()->json(['error' => $e->getMessage()], 500);
-        }
-    }
-
-    public function delete($id)
-    {
-        $section = Section::with('contents.medias')->find($id);
-
-        if (!$section) {
-            return response()->json(['error' => 'Section not found'], 404);
-        }
-
-        // Begin transaction to ensure data integrity
-        DB::beginTransaction();
-
-        try {
-            // Delete all media associated with each content
-            foreach ($section->contents as $content) {
-                foreach ($content->medias as $media) {
-                    $media->delete(); // Deletes the media
-                }
-                $content->delete(); // Deletes the content after deleting its media
-            }
-
-            $section->delete(); // Deletes the section
-
-            DB::commit();
-            return response()->json(['success' => 'Section deleted successfully']);
-        } catch (\Exception $e) {
-            // In case of an error, rollback the transaction
-            DB::rollBack();
-            return response()->json(['error' => 'An error occurred while deleting the section'], 500);
         }
     }
 }
