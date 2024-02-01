@@ -25,3 +25,4 @@ Route::get('admin/about-us/edit/{id}', [AboutUsController::class, 'edit']);
 Route::put('admin/about-us/update/{id}', [AboutUsController::class, 'update']);
 
 Route::get('academics', [AcademicsController::class, 'index']);
+Route::get('admin/academics/edit/{id}', [AcademicsController::class, 'edit']);

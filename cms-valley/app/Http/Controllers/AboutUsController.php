@@ -19,41 +19,37 @@ class AboutUsController extends Controller
         DB::beginTransaction();
         try {
             $pageName = "About Us";
-            $aboutUsSections = Section::whereHas('page', function ($query) use ($pageName) {
+            $sections = Section::whereHas('page', function ($query) use ($pageName) {
                 $query->where('pagenames', $pageName);
-            })->with(['page', 'contents.medias'])->get();
+            })->with(['contents.medias'])->get();
 
-            $data = $aboutUsSections->map(function ($section) {
-                $contentsData = $section->contents->map(function ($content) {
-                    $contentData = [
-                        'id' => $content->id,
-                        'name' => $content->name,
-                        'content_type' => $content->content_type,
-                        'content_value' => $content->content_value,
-                    ];
-
-                    // Include media details if the content type is not 'text'
-                    if ($content->content_type !== 'text') {
-                        $contentData['medias'] = $content->medias->map(function ($media) {
-                            return [
-                                'id' => $media->id,
-                                'media_name' => $media->name,
-                                'path' => $media->path,
-                                'type' => $media->type,
-                            ];
-                        })->all();
-                    }
-
-                    return $contentData;
-                });
-
+            $data = $sections->map(function ($section) {
                 return [
-                    'pagename' => $section->page->pagenames,
                     'section_id' => $section->id,
                     'section_name' => $section->name,
-                    'contents' => $contentsData
+                    'contents' => $section->contents->map(function ($content) {
+                        $contentData = [
+                            'id' => $content->id,
+                            'name' => $content->name,
+                            'content_type' => $content->content_type,
+                            'content_value' => $content->content_value,
+                        ];
+
+                        if ($content->content_type !== 'text') {
+                            $contentData['medias'] = $content->medias->map(function ($media) {
+                                return [
+                                    'id' => $media->id,
+                                    'media_name' => $media->name,
+                                    'path' => $media->path,
+                                    'type' => $media->type,
+                                ];
+                            })->all();
+                        }
+
+                        return $contentData;
+                    })->all()
                 ];
-            });
+            })->all();
 
             DB::commit();
             return response()->json($data);
@@ -63,6 +59,9 @@ class AboutUsController extends Controller
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
+
+
+
 
     public function edit($id)
     {
@@ -74,34 +73,33 @@ class AboutUsController extends Controller
             return response()->json(['error' => 'Section not found'], 404);
         }
 
-        $sectionData = [
-            'id' => $section->id,
-            'name' => $section->name,
-            'contents' => $section->contents->map(function ($content) {
-                $contentData = [
-                    'id' => $content->id,
+        $sectionContents = $section->contents->mapWithKeys(function ($content) {
+            $contentData = [
+                $content->id => [
                     'name' => $content->name,
                     'content_type' => $content->content_type,
                     'content_value' => $content->content_value,
-                ];
+                ]
+            ];
 
-                if (!($content->content_type === 'text')) {
-                    $contentData['medias'] = $content->medias->map(function ($media) {
-                        return [
-                            'id' => $media->id,
+            if ($content->content_type !== 'text') {
+                $contentData[$content->id]['medias'] = $content->medias->mapWithKeys(function ($media) {
+                    return [
+                        $media->id => [
                             'media_name' => $media->media_name,
                             'path' => $media->path,
                             'type' => $media->type,
-                        ];
-                    });
-                }
+                        ]
+                    ];
+                });
+            }
 
-                return $contentData;
-            }),
-        ];
+            return $contentData;
+        });
 
-        return response()->json($sectionData);
+        return response()->json($sectionContents);
     }
+
 
 
 

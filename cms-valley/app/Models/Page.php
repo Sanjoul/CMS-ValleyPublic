@@ -16,6 +16,7 @@ class Page extends Model
         'pagenames',
         'title',
         'section_id'
+
     ];
 
     public function sections()
