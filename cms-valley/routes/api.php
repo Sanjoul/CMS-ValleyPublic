@@ -35,6 +35,6 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('admin/about-us/edit/{id}', [AboutUsController::class, 'edit']);
         Route::put('admin/about-us/update/{id}', [AboutUsController::class, 'update']);
         Route::get('admin/academics/edit/{id}', [AcademicsController::class, 'edit']);
-        // Add other admin routes here
+        Route::get('logout', [AuthController::class, 'logout']);
     });
 });
